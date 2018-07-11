@@ -1,0 +1,12 @@
+version: 1.0
+name: harperdb
+description: HarperDB installer
+bindable: False
+async: optional
+metadata:
+  displayName: HarperDB
+  longDescription: |
+   Install HarperDB.
+  documentationUrl: https://github.com/otterstedt/ansible.roles.harperdb-install/blob/master/README.md
+  imageUrl: https://avatars1.githubusercontent.com/u/3952548?s=460&v=4
+  providerDisplayName: Smolandia
