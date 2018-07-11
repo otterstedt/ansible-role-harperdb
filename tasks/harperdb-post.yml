@@ -1,0 +1,13 @@
+- name: Create HarperDB service definition
+  template: 
+    src: harperdb_hdb.service.j2
+    dest: /usr/lib/systemd/system/hdb.service
+  become: yes
+
+- name: Reload/Start HarperDB service
+  systemd: 
+    name: hdb 
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  become: yes

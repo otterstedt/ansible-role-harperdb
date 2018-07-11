@@ -1,0 +1,71 @@
+harperdb_arch: ARM
+harperdb_version: "1.1.0"
+harperdb_systemuser: "{{ ansible_user }}"
+
+harperdb_timestamp_ms: "{{ ansible_date_time.epoch | int * 1000 }}" 
+
+#Run installation script: 'installer', Copy binaries installation: 'bins'
+harperdb_installation_type: installer
+
+harperdb_packages: []
+
+harperdb_pip_packages: []
+
+
+harperdb_installer:
+  name: harperdb-installers/HarperDB-CE-{{ harperdb_arch }}-{{ harperdb_version }}.tar
+  dest: /home/{{ harperdb_systemuser }}/local
+  hdb_root: "/home/{{ harperdb_systemuser }}/local/HarperDB/hdb"
+  
+harperdb_installation: 
+  responses:
+    "1.1.0":
+      "^(.*):":
+        - "yes"
+        - "{{ harperdb_installer.hdb_root }}"
+        - "{{ harperdb_config.ports.http }}"
+        - "{{ harperdb_config.ports.https }}"
+        - "{{ harperdb_config.users.admin.user }}"
+        - "{{ harperdb_config.users.admin.pass }}"
+        - ""
+
+
+harperdb_bins: 
+  home:
+    name: "harperdb-bins/{{ harperdb_arch + '/HarperDB-Home-' + harperdb_version  + '.tar.gz' }}"
+    dest: /home/{{ ansible_user }}/local
+  root:
+    name: "harperdb-bins/{{ harperdb_arch + '/HarperDB-Root-' + harperdb_version  + '.tar.gz' }}"
+    dest: /home/{{ ansible_user }}/local/HarperDB
+
+harperdb_executable:
+  folder: "{{ harperdb_installer.dest + '/HarperDB/bin' if harperdb_installation_type ==  'installer' else harperdb_bins.home + '/HarperDB/bin' }}"
+  binary: harperdb
+
+
+
+harperdb_config:
+  users:
+    admin:
+      user: "{{ vault.harperdb_credentials.admin.user }}"
+      pass: "{{ vault.harperdb_credentials.admin.pass }}"
+      hashed: "{{ vault.harperdb_credentials.admin.hashed }}"
+      encrypted: "{{ vault.harperdb_credentials.admin.encrypted }}"
+      roleId: "{{ vault.harperdb_credentials.admin.roleId[harperdb_arch]}}"
+  ports:
+    http: 9925
+    https: 31283
+        
+
+harperdb_folders: 
+  - path: "{{ harperdb_bins.home.dest }}"
+    state: directory
+    mode: "0700"
+    when: "{{ harperdb_installation_type == 'bins' }}"
+  - path: "{{ harperdb_installer.dest }}"
+    state: directory
+    mode: "0700"
+    when: "{{ harperdb_installation_type == 'installer' }}" 
+
+harperdb_sync: 
+  enabled: False

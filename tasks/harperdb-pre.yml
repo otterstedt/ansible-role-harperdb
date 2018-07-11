@@ -1,0 +1,22 @@
+- name: Create files {{ folders }}
+  file:
+    path: "{{ item.path }}"
+    state: "{{ item.state }}"
+    mode: "{{ item.mode }}"
+    owner: "{{ harperdb_systemuser }}"
+  with_items: "{{ harperdb_folders }}"
+  when: item.when is not defined or item.when 
+  become: yes
+
+- name: Install packages {{ harperdb_packages }}
+  become: yes
+  package:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ harperdb_packages }}"
+
+- name: Install pip packages {{ harperdb_packages }}
+  become: yes
+  pip:
+    name: "{{ item.name }}"
+  with_items: "{{ harperdb_pip_packages }}"

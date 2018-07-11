@@ -1,0 +1,17 @@
+PROJECT_DIR = {{ harperdb_bins.home.dest }}/HarperDB
+HDB_ROOT = {{ harperdb_bins.root.dest }}/hdb
+HTTP_PORT = {{ harperdb_config.ports.http }}
+HTTPS_PORT = {{ harperdb_config.ports.https }}
+CERTIFICATE = {{ harperdb_bins.root.dest }}/hdb/keys/certificate.pem
+PRIVATE_KEY = {{ harperdb_bins.root.dest }}/hdb/keys/privateKey.pem
+HTTPS_ON = FALSE
+HTTP_ON = TRUE
+CORS_ON = TRUE
+CORS_WHITELIST =
+SERVER_TIMEOUT_MS = 120000
+LOG_LEVEL = error
+   ;LOGGER = 1 Uses the WINSTON logger.
+   ;LOGGER = 2 Uses the more performant PINO logger.
+LOGGER = 1
+LOG_PATH = {{ harperdb_bins.root.dest }}/hdb/log/hdb_log.log
+NODE_ENV = production

@@ -1,0 +1,19 @@
+[Unit]
+Description=HarperDB Service
+
+[Service]
+ExecStart={{ harperdb_executable.folder }}/harperdb run
+ExecStop={{ harperdb_executable.folder }}/harperdb stop
+ExecReload={{ harperdb_executable.folder }}/harperdb restart
+Restart=always
+#RestartSec=5
+Type=forking
+User={{ harperdb_systemuser }}
+# Note RHEL/Fedora uses 'nobody', Debian/Ubuntu uses 'nogroup'
+Group={{ systemd_nogroup_name }}
+Environment=PATH=/bin:/usr/bin:/usr/local/bin:$PATH
+WorkingDirectory={{ harperdb_executable.folder }}
+
+[Install]
+Alias=hdb.service
+WantedBy=multi-user.target

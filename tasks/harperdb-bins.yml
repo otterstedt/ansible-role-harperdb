@@ -1,0 +1,26 @@
+- name: Upload HarperDB home
+  unarchive:
+    src: "{{ harperdb_bins.home.name }}"
+    dest: "{{ harperdb_bins.home.dest }}"
+    creates: "{{ harperdb_bins.home.dest }}/HarperDB"
+
+- name: Upload HarperDB root
+  unarchive:
+    src: "{{ harperdb_bins.root.name }}"
+    dest: "{{ harperdb_bins.root.dest }}"
+    creates: "{{ harperdb_bins.root.dest }}/hdb"
+
+- name: Copy HarperDB boot settings file
+  template:
+    src: harperdb_hdb_boot_properties.file.j2
+    dest: "{{ harperdb_bins.home.dest }}/HarperDB/hdb_boot_properties.file"
+
+- name: Copy HarperDB settings file
+  template:
+    src: harperdb_settings.js.j2
+    dest: "{{ harperdb_bins.root.dest }}/hdb/config/settings.js"
+
+- name: Copy Admin user credentials file
+  template:
+    src: harperdb_admin_user_config.j2
+    dest: "{{ harperdb_bins.root.dest }}/hdb/schema/system/hdb_user/username/{{ harperdb_config.users.admin.user }}/{{ harperdb_timestamp_ms }}.hdb"

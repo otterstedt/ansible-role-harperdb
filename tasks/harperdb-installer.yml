@@ -1,0 +1,37 @@
+- name: Upload HarperDB installer
+  unarchive:
+    src: "{{ harperdb_installer.name }}"
+    dest: "{{ harperdb_installer.dest }}"
+    owner: "{{ harperdb_systemuser }}"
+    creates: "{{ harperdb_installer.hdb_root }}"
+  become: yes
+
+- name: Install HarperDB
+  expect:
+    command: ./harperdb install
+    chdir: "{{ harperdb_installer.dest }}/HarperDB/bin/"
+    timeout: 120
+    echo: no
+    creates: "{{ harperdb_installer.hdb_root }}"
+    responses:  "{{ harperdb_installation.responses[harperdb_version] }}"
+
+
+
+
+
+
+
+
+#    responses:
+#      '(.*)Terms and Conditions(.*)': ""
+#      '(.*)\[HDB_ROOT\](.*)': "{{ harperdb_installer.hdb_root }}"
+#      '(.*)\[HTTP_PORT\](.*)': ""
+#      '(.*)\[HTTPS_PORT\](.*)': ""
+#      '(.*)\[HDB_ADMIN_USERNAME\](.*)': "{{ harperdb_config.users.admin.user }}"
+#      '(.*)\[HDB_ADMIN_PASSWORD\](.*)': "{{ harperdb_config.users.admin.pass }}"
+
+
+
+
+
+

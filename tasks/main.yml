@@ -1,0 +1,12 @@
+- include: harperdb-pre.yml 
+  tags: [harperdb,'harperdb:pre']
+
+- include: harperdb-{{ harperdb_installation_type }}.yml 
+  tags: [harperdb,'harperdb:install']
+
+- include: harperdb-post.yml 
+  tags: [harperdb,'harperdb:post']
+
+- include: harperdb-sync.yml 
+  tags: [harperdb,'harperdb:sync']
+  when: harperdb_sync.enabled
